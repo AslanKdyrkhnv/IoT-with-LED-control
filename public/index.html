@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>LED Control</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+      body {
+        font-family: sans-serif;
+        text-align: center;
+        margin-top: 50px;
+      }
+      button,
+      input {
+        margin: 10px;
+        font-size: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>LED Control</h1>
+    <button onclick="sendCommand('on')">Turn ON</button>
+    <button onclick="sendCommand('off')">Turn OFF</button>
+    <br />
+    <label for="brightness">Brightness: </label>
+    <input
+      type="range"
+      min="0"
+      max="255"
+      id="brightness"
+      oninput="updateSlider(this.value)"
+    />
+    <span id="value">0</span>
+    <script>
+      const socket = io();
+
+      function sendCommand(cmd) {
+        socket.emit("command", cmd);
+      }
+
+      function updateSlider(value) {
+        document.getElementById("value").textContent = value;
+        sendCommand(value);
+      }
+    </script>
+  </body>
+</html>
